@@ -4,14 +4,16 @@ using Investec.Dashboard.Server;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Investec.Dashboard.Server.Migrations
 {
     [DbContext(typeof(InvestecDBContext))]
-    partial class InvestecDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200713190821_DecimalForAmount")]
+    partial class DecimalForAmount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

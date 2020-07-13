@@ -2,7 +2,7 @@
 
 namespace Investec.Dashboard.Shared.Entities
 {
-    public class Transaction
+    public class TransactionEntity
     {
         public int Id { get; set; }
         public string AccountId { get; set; }
@@ -13,6 +13,6 @@ namespace Investec.Dashboard.Shared.Entities
         public DateTime PostingDate { get; set; }
         public DateTime ValueDate { get; set; }
         public DateTime ActionDate { get; set; }
-        public float Amount { get; set; }
+        public decimal Amount { get; set; }
     }
 }

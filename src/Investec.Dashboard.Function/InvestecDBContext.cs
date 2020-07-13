@@ -1,7 +1,7 @@
 ﻿using Investec.Dashboard.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Investec.Dashboard.Server
+namespace Investec.Dashboard.Function
 {
     public class InvestecDBContext : DbContext
     {
