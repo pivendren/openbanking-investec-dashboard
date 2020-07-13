@@ -1,10 +1,10 @@
+using Investec.Dashboard.Function.Extensions.Db;
 using Investec.Dashboard.Shared.Entities;
 using Investec.Dashboard.Shared.Models.OpenAPI;
 using Microsoft.Azure.WebJobs;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -46,20 +46,22 @@ namespace Investec.Dashboard.Function.TimeTriggers
                 var transactionResponse = await client.SendAsync(transactionRequest).Result.Content.ReadAsStringAsync();
                 var transactions = JsonConvert.DeserializeObject<TransactionsResponseModel>(transactionResponse).Data.Transactions;
 
-                var t = transactions.First();
-
-                _context.Add<TransactionEntity>(new TransactionEntity
+                foreach (var transaction in transactions)
                 {
-                    AccountId = t.AccountId,
-                    ActionDate = t.ActionDate,
-                    Amount = t.Amount,
-                    CardNumber = t.CardNumber,
-                    Description = t.Description,
-                    PostingDate = t.PostingDate,
-                    Status = t.Status,
-                    Type = t.Type,
-                    ValueDate = t.ValueDate
-                });
+                    _context.Set<TransactionEntity>().AddIfNotExists(new TransactionEntity
+                    {
+                        AccountId = transaction.AccountId,
+                        ActionDate = transaction.ActionDate,
+                        Amount = transaction.Amount,
+                        CardNumber = transaction.CardNumber,
+                        Description = transaction.Description,
+                        PostingDate = transaction.PostingDate,
+                        Status = transaction.Status,
+                        ValueDate = transaction.ValueDate,
+                        Type = transaction.Type
+                    }, t => t.Amount.Equals(transaction.Amount) && t.PostingDate.Equals(transaction.PostingDate) && t.Description.Equals(transaction.Description));
+                }
+
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)
