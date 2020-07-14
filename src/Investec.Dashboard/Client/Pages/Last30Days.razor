@@ -1,10 +1,8 @@
 ﻿@using Investec.Dashboard.Shared.DTOs
 @inject HttpClient Http
 
-<h3>Last30Days</h3>
-
-<Row>
-    <Column ColumnSize="ColumnSize.IsThird.OnWidescreen">
+<Container>
+    <Row>
         <Card Margin="Margin.Is4.OnY">
             <CardHeader>
                 <CardTitle>Last 30 days spend</CardTitle>
@@ -16,11 +14,23 @@
                 <LineChart @ref="lineChart" TItem="double" />
             </CardBody>
         </Card>
-    </Column>
-</Row>
+    </Row>
+    <Row>
+        <Alert Color="Color.Success" Visible="@dismisableAlert" Dismisable="true">
+            <CloseButton Clicked="@(()=>dismisableAlert = false)" />
+            <Paragraph>
+                <AlertDescription>
+                    Looks like you spent <AlertMessage>@SpendAlertAmount</AlertMessage> in the last 30 days.
+                </AlertDescription>
+            </Paragraph>
+        </Alert>
+    </Row>
+</Container>
 
 @code {
+    bool dismisableAlert = true;
     LineChart<double> lineChart;
+    string SpendAlertAmount;
     TransactionDay[] transactions;
 
     string[] Labels;
@@ -36,6 +46,7 @@
             isAlreadyInitialised = true;
 
             transactions = await Http.GetFromJsonAsync<TransactionDay[]>("Dashboard/LastThirtyDaysSpend");
+            SpendAlertAmount = "R" + transactions.Sum(t => t.Amount);
             await Task.WhenAll(HandleRedraw(lineChart, GetLineChartDataset));
 
         }
@@ -44,6 +55,7 @@
     protected override async Task OnInitializedAsync()
     {
         transactions = await Http.GetFromJsonAsync<TransactionDay[]>("Dashboard/LastThirtyDaysSpend");
+        SpendAlertAmount = "R" + transactions.Sum(t => t.Amount);
         await Task.WhenAll(HandleRedraw(lineChart, GetLineChartDataset));
     }
 
