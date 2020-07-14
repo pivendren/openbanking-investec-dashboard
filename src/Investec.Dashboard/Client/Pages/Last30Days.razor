@@ -3,7 +3,7 @@
 
 <Container>
     <Row>
-        <Card Margin="Margin.Is4.OnY">
+        <Card Margin="Margin.Is4.OnY" ColumnSize="ColumnSize.IsFull">
             <CardHeader>
                 <CardTitle>Last 30 days spend</CardTitle>
             </CardHeader>
@@ -12,25 +12,18 @@
             </CardBody>
             <CardBody>
                 <LineChart @ref="lineChart" TItem="double" />
+                <CardText Alignment="TextAlignment.Center">
+                    Looks like you spent <b> @TotalSpend </b> in the last 30 days.
+                </CardText>
             </CardBody>
         </Card>
-    </Row>
-    <Row>
-        <Alert Color="Color.Success" Visible="@dismisableAlert" Dismisable="true">
-            <CloseButton Clicked="@(()=>dismisableAlert = false)" />
-            <Paragraph>
-                <AlertDescription>
-                    Looks like you spent <AlertMessage>@SpendAlertAmount</AlertMessage> in the last 30 days.
-                </AlertDescription>
-            </Paragraph>
-        </Alert>
     </Row>
 </Container>
 
 @code {
     bool dismisableAlert = true;
     LineChart<double> lineChart;
-    string SpendAlertAmount;
+    string TotalSpend;
     TransactionDay[] transactions;
 
     string[] Labels;
@@ -46,7 +39,7 @@
             isAlreadyInitialised = true;
 
             transactions = await Http.GetFromJsonAsync<TransactionDay[]>("Dashboard/LastThirtyDaysSpend");
-            SpendAlertAmount = "R" + transactions.Sum(t => t.Amount);
+            TotalSpend = "R" + transactions.Sum(t => t.Amount);
             await Task.WhenAll(HandleRedraw(lineChart, GetLineChartDataset));
 
         }
@@ -55,7 +48,7 @@
     protected override async Task OnInitializedAsync()
     {
         transactions = await Http.GetFromJsonAsync<TransactionDay[]>("Dashboard/LastThirtyDaysSpend");
-        SpendAlertAmount = "R" + transactions.Sum(t => t.Amount);
+        TotalSpend = "R" + transactions.Sum(t => t.Amount);
         await Task.WhenAll(HandleRedraw(lineChart, GetLineChartDataset));
     }
 

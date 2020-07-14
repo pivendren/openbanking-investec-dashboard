@@ -1,27 +1,10 @@
 ﻿@page "/"
 
-    <Row>
-        <Container>
-            <Last30Days></Last30Days>
-        </Container>
-    </Row>
-
-    <Row>
-        <Column ColumnSize="ColumnSize.Is10">
-            <Container>
-                <Weekly></Weekly>
-            </Container>
-        </Column>
-        <Column>
-            Some other info goes here.
-        </Column>
-    </Row>
-
-    <Row>
-        <Column ColumnSize="ColumnSize.Is10">
-            @*<Weekly></Weekly>*@
-        </Column>
-        <Column>
-            Some other info goes here.
-        </Column>
-    </Row>
+<Row>
+    <Column ColumnSize="ColumnSize.Is6">
+        <Last30Days></Last30Days>
+    </Column>
+    <Column ColumnSize="ColumnSize.Is6">
+        <Weekly></Weekly>
+    </Column>
+</Row>
