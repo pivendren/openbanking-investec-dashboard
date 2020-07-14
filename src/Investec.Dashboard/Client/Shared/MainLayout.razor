@@ -1,15 +1,65 @@
-﻿@inherits LayoutComponentBase
+﻿@layout RootLayout
+@inherits LayoutComponentBase
 
-<div class="sidebar">
-    <NavMenu />
-</div>
+<Layout>
+    <Layout>
+        <LayoutHeader Fixed="true">
+            <Bar Style="height: 64px;" Breakpoint="Breakpoint.Desktop" Background="Background.Primary" ThemeContrast="ThemeContrast.Dark">
+                <BarBrand>
+                    <BarItem>
+                        <BarLink To="">
+                            <BarIcon IconName="IconName.Dashboard" />
+                            Blazorise Demo
+                        </BarLink>
+                    </BarItem>
+                </BarBrand>
 
-<div class="main">
-    <div class="top-row px-4">
-        <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
-    </div>
+                <BarMenu>
+                    <BarStart>
+                        <BarItem>
+                            <BarLink To="">
+                                <BarIcon IconName="IconName.DollarSign" />
+                                Dashboard
+                            </BarLink>
+                        </BarItem>
+                        <BarItem>
+                            <BarLink To="/counter">
+                                <BarIcon IconName="IconName.DollarSign" />
+                                Counter
+                            </BarLink>
+                        </BarItem>
+                        <BarItem>
+                            <BarLink To="/fetchdata">
+                                <BarIcon IconName="IconName.DollarSign" />
+                                Fetch data
+                            </BarLink>
+                        </BarItem>
+                        <BarItem>
+                            <BarLink To="/charts">
+                                <BarIcon IconName="IconName.DollarSign" />
+                                Charts
+                            </BarLink>
+                        </BarItem>
+                    </BarStart>             
+                </BarMenu>
+            </Bar>
+        </LayoutHeader>
+        <Layout>
+            <Layout Style="height:10%">
+                <Alert Color="Color.Primary" Visible="true">
+                    Fixed widgets go here
+                </Alert>
+            </Layout>
 
-    <div class="content px-4">
-        @Body
-    </div>
-</div>
+            <Layout Style="height:90%">
+                <LayoutContent Padding="Padding.Is4.OnX">
+                    @Body
+                </LayoutContent>
+            </Layout>
+        </Layout>
+    </Layout>
+</Layout>
+
+@code{
+
+}
