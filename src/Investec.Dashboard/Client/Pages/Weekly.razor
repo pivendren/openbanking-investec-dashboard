@@ -1,0 +1,69 @@
+﻿<h3>Weekly</h3>
+
+<Row>
+    <Column ColumnSize="ColumnSize.IsAuto">
+            <Card Margin="Margin.Is4.OnY" ColumnSize="ColumnSize.IsFull">
+                <CardHeader>
+                    <CardTitle>Bar</CardTitle>
+                </CardHeader>
+                <CardBody>
+                    <Button Color="Color.Primary" Outline="true" Clicked="@(async () => await HandleRedraw( barChart, GetBarChartDataset ))">Redraw</Button>
+                </CardBody>
+                <CardBody>
+                    <Chart @ref="barChart" Type="ChartType.Bar" TItem="double" />
+                </CardBody>
+            </Card>
+        </Column>  
+</Row>
+
+@code {
+    Chart<double> barChart;
+
+    string[] Labels = { "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun" };
+    List<string> backgroundColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 0.2f), ChartColor.FromRgba(54, 162, 235, 0.2f), ChartColor.FromRgba(255, 206, 86, 0.2f), ChartColor.FromRgba(75, 192, 192, 0.2f), ChartColor.FromRgba(153, 102, 255, 0.2f), ChartColor.FromRgba(255, 159, 64, 0.2f) };
+    List<string> borderColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 1f), ChartColor.FromRgba(54, 162, 235, 1f), ChartColor.FromRgba(255, 206, 86, 1f), ChartColor.FromRgba(75, 192, 192, 1f), ChartColor.FromRgba(153, 102, 255, 1f), ChartColor.FromRgba(255, 159, 64, 1f) };
+
+    bool isAlreadyInitialised;
+
+    Random random = new Random(DateTime.Now.Millisecond);
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!isAlreadyInitialised)
+        {
+            isAlreadyInitialised = true;
+
+            await Task.WhenAll(HandleRedraw(barChart, GetBarChartDataset));
+
+        }
+    }
+
+    async Task HandleRedraw<TDataSet, TItem, TOptions, TModel>(Blazorise.Charts.BaseChart<TDataSet, TItem, TOptions, TModel> chart, Func<TDataSet> getDataSet)
+where TDataSet : ChartDataset<TItem>
+where TOptions : ChartOptions
+where TModel : ChartModel
+    {
+        await chart.Clear();
+
+        await chart.AddLabelsDatasetsAndUpdate(Labels, new TDataSet[] { getDataSet(), getDataSet() }); ;
+    }
+
+    BarChartDataset<double> GetBarChartDataset()
+    {
+
+        return new BarChartDataset<double>
+        {
+            Label = "Week",
+            Data = RandomizeData(),
+            BackgroundColor = backgroundColors,
+            BorderColor = borderColors,
+            BorderWidth = 1
+        };
+    }
+
+    List<double> RandomizeData()
+    {
+        return new List<double> { random.Next(3, 50) * random.NextDouble(), random.Next(3, 50) * random.NextDouble(), random.Next(3, 50) * random.NextDouble(), random.Next(3, 50) * random.NextDouble(), random.Next(3, 50) * random.NextDouble(), random.Next(3, 50) * random.NextDouble() };
+    }
+
+}

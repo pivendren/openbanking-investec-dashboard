@@ -1,8 +1,27 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
+    <Row>
+        <Container>
+            <Last30Days></Last30Days>
+        </Container>
+    </Row>
 
-Welcome to your new app.
+    <Row>
+        <Column ColumnSize="ColumnSize.Is10">
+            <Container>
+                <Weekly></Weekly>
+            </Container>
+        </Column>
+        <Column>
+            Some other info goes here.
+        </Column>
+    </Row>
 
-
-<Counter></Counter>
+    <Row>
+        <Column ColumnSize="ColumnSize.Is10">
+            @*<Weekly></Weekly>*@
+        </Column>
+        <Column>
+            Some other info goes here.
+        </Column>
+    </Row>

@@ -22,7 +22,10 @@ namespace Investec.Dashboard.Server
         {
             services.AddControllersWithViews();
             services.AddRazorPages();
-            services.AddDbContext<InvestecDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            //string connectionString = Configuration.GetConnectionString("SqlConnectionString");
+            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=InvestecDb;Trusted_Connection=True;MultipleActiveResultSets=true";
+            services.AddDbContext<InvestecDBContext>(options => options.UseSqlServer(connectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

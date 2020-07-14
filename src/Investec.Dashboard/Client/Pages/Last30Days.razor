@@ -1,0 +1,77 @@
+﻿@using Investec.Dashboard.Shared.DTOs
+@inject HttpClient Http
+
+<h3>Last30Days</h3>
+
+<Row>
+    <Column ColumnSize="ColumnSize.IsThird.OnWidescreen">
+        <Card Margin="Margin.Is4.OnY">
+            <CardHeader>
+                <CardTitle>Last 30 days spend</CardTitle>
+            </CardHeader>
+            <CardBody>
+                <Button Color="Color.Primary" Outline="true" Clicked="@(async () => await HandleRedraw( lineChart, GetLineChartDataset ))">Refresh</Button>
+            </CardBody>
+            <CardBody>
+                <LineChart @ref="lineChart" TItem="double" />
+            </CardBody>
+        </Card>
+    </Column>
+</Row>
+
+@code {
+    LineChart<double> lineChart;
+    TransactionDay[] transactions;
+
+    string[] Labels;
+    List<string> backgroundColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 0.2f), ChartColor.FromRgba(54, 162, 235, 0.2f), ChartColor.FromRgba(255, 206, 86, 0.2f), ChartColor.FromRgba(75, 192, 192, 0.2f), ChartColor.FromRgba(153, 102, 255, 0.2f), ChartColor.FromRgba(255, 159, 64, 0.2f) };
+    List<string> borderColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 1f), ChartColor.FromRgba(54, 162, 235, 1f), ChartColor.FromRgba(255, 206, 86, 1f), ChartColor.FromRgba(75, 192, 192, 1f), ChartColor.FromRgba(153, 102, 255, 1f), ChartColor.FromRgba(255, 159, 64, 1f) };
+
+    bool isAlreadyInitialised;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!isAlreadyInitialised)
+        {
+            isAlreadyInitialised = true;
+
+            transactions = await Http.GetFromJsonAsync<TransactionDay[]>("Dashboard/LastThirtyDaysSpend");
+            await Task.WhenAll(HandleRedraw(lineChart, GetLineChartDataset));
+
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        transactions = await Http.GetFromJsonAsync<TransactionDay[]>("Dashboard/LastThirtyDaysSpend");
+        await Task.WhenAll(HandleRedraw(lineChart, GetLineChartDataset));
+    }
+
+    async Task HandleRedraw<TDataSet, TItem, TOptions, TModel>(Blazorise.Charts.BaseChart<TDataSet, TItem, TOptions, TModel> chart, Func<TDataSet> getDataSet)
+where TDataSet : ChartDataset<TItem>
+where TOptions : ChartOptions
+where TModel : ChartModel
+    {
+        await chart.Clear();
+
+        await chart.AddLabelsDatasetsAndUpdate(Labels, new TDataSet[] { getDataSet() });
+    }
+
+    LineChartDataset<double> GetLineChartDataset()
+    {
+        Labels = transactions.Select(t => t.Date.ToString("dd MMM")).ToArray();
+        var chartData = transactions.Select(t => t.Amount).ToList();
+
+        return new LineChartDataset<double>
+        {
+            Label = "Spend",
+            Data = chartData,
+            BackgroundColor = backgroundColors,
+            BorderColor = borderColors,
+            Fill = true,
+            PointRadius = 3,
+            BorderWidth = 1,
+            PointBorderColor = Enumerable.Repeat(borderColors.First(), 6).ToList()
+        };
+    }
+}
