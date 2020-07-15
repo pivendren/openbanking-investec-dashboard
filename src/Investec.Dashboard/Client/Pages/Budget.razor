@@ -1,0 +1,36 @@
+﻿@using Investec.Dashboard.Shared.DTOs
+@inject HttpClient Http
+
+<Container>
+    <CardText Alignment="TextAlignment.Center">
+        <h1>You have R @remaining of your budget</h1>
+        <h4>Based on your spending habits we predict that you will spend R @predicted today</h4>
+    </CardText>
+</Container>
+
+@code {
+    double predicted;
+    double remaining;
+
+    bool isAlreadyInitialised;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!isAlreadyInitialised)
+        {
+            isAlreadyInitialised = true;
+
+            var budget = await Http.GetFromJsonAsync<BudgetLeft>("Dashboard/Budget");
+            predicted = budget.Predicted;
+            remaining = budget.Remaining;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var budget = await Http.GetFromJsonAsync<BudgetLeft>("Dashboard/Budget");
+        predicted = budget.Predicted;
+        remaining = budget.Remaining;
+    }
+
+}

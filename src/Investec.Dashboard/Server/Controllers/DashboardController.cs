@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using Openbanking_Investec_DashboardML.Model;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -98,6 +99,36 @@ namespace Investec.Dashboard.Server.Controllers
             {
                 LastWeek = lastWeekTransactionsDays,
                 CurrentWeek = currentWeekTransactionsDays
+            };
+        }
+
+        [HttpGet]
+        [Route("Budget")]
+        public async Task<BudgetLeft> Budget()
+        {
+            decimal spent;
+            var today = DateTime.UtcNow;
+            var input = new ModelInput();
+            input.Col11 = DateTime.Now.Day;
+            ModelOutput result = ConsumeModel.Predict(input);
+
+            var budget = _investecDB.Budget.First();
+
+            if (today.Day.Equals(budget.StartDay))
+            {
+                spent = _investecDB.Transactions.Where(t => t.PostingDate >= today & t.Type.Equals("DEBIT")).Sum(t => t.Amount);
+            }
+            else
+            {
+                var startDay = new DateTime(today.Year, (today.Month - 1), budget.StartDay);
+                spent = _investecDB.Transactions.Where(t => t.PostingDate >= startDay & t.Type.Equals("DEBIT")).Sum(t => t.Amount);
+            }
+
+            var remaining = budget.Limit - spent;
+            return new BudgetLeft
+            {
+                Predicted = Math.Round(result.Score, 2),
+                Remaining = (double)remaining
             };
         }
     }

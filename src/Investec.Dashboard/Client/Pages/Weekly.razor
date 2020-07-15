@@ -8,12 +8,12 @@
                 <CardTitle>Week on week</CardTitle>
             </CardHeader>
             <CardBody>
-                <Button Color="Color.Primary" Outline="true" Clicked="@(async () => await HandleRedraw( barChart, GetBarChartDatasetLastWeek, GetBarChartDatasetCurrentWeek ))">Redraw</Button>
+                <Button Color="Color.Primary" Outline="true" Clicked="@(async () => await HandleRedraw( barChart, GetBarChartDatasetLastWeek, GetBarChartDatasetCurrentWeek ))">Refresh</Button>
             </CardBody>
             <CardBody>
                 <Chart @ref="barChart" Type="ChartType.Bar" TItem="double" />
                 <CardText Alignment="TextAlignment.Center">
-                    Some text.
+                    Other trend data.
                 </CardText>
             </CardBody>
         </Card>

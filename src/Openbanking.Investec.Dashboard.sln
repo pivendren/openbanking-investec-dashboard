@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Investec.Dashboard.Shared",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Investec.Dashboard.Function", "Investec.Dashboard.Function\Investec.Dashboard.Function.csproj", "{3A281D2B-42DA-4FDD-B9C6-B8EBD68BCFA0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Openbanking.Investec.DashboardML.Model", "Investec.Dashboard\Openbanking.Investec.DashboardML.Model\Openbanking.Investec.DashboardML.Model.csproj", "{9C0D25E1-C03E-40E3-A049-519ECAE09921}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Openbanking.Investec.DashboardML.ConsoleApp", "Investec.Dashboard\Openbanking.Investec.DashboardML.ConsoleApp\Openbanking.Investec.DashboardML.ConsoleApp.csproj", "{58BB8CBE-1BAF-4597-B19E-CB544614D01C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{3A281D2B-42DA-4FDD-B9C6-B8EBD68BCFA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A281D2B-42DA-4FDD-B9C6-B8EBD68BCFA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A281D2B-42DA-4FDD-B9C6-B8EBD68BCFA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C0D25E1-C03E-40E3-A049-519ECAE09921}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C0D25E1-C03E-40E3-A049-519ECAE09921}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C0D25E1-C03E-40E3-A049-519ECAE09921}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C0D25E1-C03E-40E3-A049-519ECAE09921}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58BB8CBE-1BAF-4597-B19E-CB544614D01C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58BB8CBE-1BAF-4597-B19E-CB544614D01C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58BB8CBE-1BAF-4597-B19E-CB544614D01C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58BB8CBE-1BAF-4597-B19E-CB544614D01C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Client\Investec.Dashboard.Client.csproj" />
+    <ProjectReference Include="..\Openbanking.Investec.DashboardML.Model\Openbanking.Investec.DashboardML.Model.csproj" />
     <ProjectReference Include="..\Shared\Investec.Dashboard.Shared.csproj" />
   </ItemGroup>
 

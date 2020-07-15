@@ -10,5 +10,6 @@ namespace Investec.Dashboard.Server
         }
 
         public DbSet<TransactionEntity> Transactions { get; set; }
+        public DbSet<Budget> Budget { get; set; }
     }
 }
