@@ -5,7 +5,7 @@
     <Row>
         <Card Margin="Margin.Is4.OnY" ColumnSize="ColumnSize.IsFull">
             <CardHeader>
-                <CardTitle>Last 30 days spend</CardTitle>
+                <CardTitle>Week on week</CardTitle>
             </CardHeader>
             <CardBody>
                 <Button Color="Color.Primary" Outline="true" Clicked="@(async () => await HandleRedraw( barChart, GetBarChartDatasetLastWeek, GetBarChartDatasetCurrentWeek ))">Redraw</Button>
