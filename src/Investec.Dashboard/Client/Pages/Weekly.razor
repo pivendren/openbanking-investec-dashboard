@@ -1,67 +1,85 @@
-﻿<Row>
-    <Column ColumnSize="ColumnSize.IsAuto">
-            <Card Margin="Margin.Is4.OnY" ColumnSize="ColumnSize.IsFull">
-                <CardHeader>
-                    <CardTitle>Bar</CardTitle>
-                </CardHeader>
-                <CardBody>
-                    <Button Color="Color.Primary" Outline="true" Clicked="@(async () => await HandleRedraw( barChart, GetBarChartDataset ))">Redraw</Button>
-                </CardBody>
-                <CardBody>
-                    <Chart @ref="barChart" Type="ChartType.Bar" TItem="double" />
-                </CardBody>
-            </Card>
-        </Column>  
-</Row>
+﻿@using Investec.Dashboard.Shared.DTOs
+@inject HttpClient Http
+
+<Container>
+    <Row>
+        <Card Margin="Margin.Is4.OnY" ColumnSize="ColumnSize.IsFull">
+            <CardHeader>
+                <CardTitle>Last 30 days spend</CardTitle>
+            </CardHeader>
+            <CardBody>
+                <Button Color="Color.Primary" Outline="true" Clicked="@(async () => await HandleRedraw( barChart, GetBarChartDatasetLastWeek, GetBarChartDatasetCurrentWeek ))">Redraw</Button>
+            </CardBody>
+            <CardBody>
+                <Chart @ref="barChart" Type="ChartType.Bar" TItem="double" />
+                <CardText Alignment="TextAlignment.Center">
+                    Some text.
+                </CardText>
+            </CardBody>
+        </Card>
+    </Row>
+</Container>
 
 @code {
     Chart<double> barChart;
 
-    string[] Labels = { "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun" };
+    TransactionDay[] lastWeekTransactions;
+    TransactionDay[] currentWeekTransactions;
+
+    string[] Labels = { "Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat" };
     List<string> backgroundColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 0.2f), ChartColor.FromRgba(54, 162, 235, 0.2f), ChartColor.FromRgba(255, 206, 86, 0.2f), ChartColor.FromRgba(75, 192, 192, 0.2f), ChartColor.FromRgba(153, 102, 255, 0.2f), ChartColor.FromRgba(255, 159, 64, 0.2f) };
+    List<string> currentWeekbackgroundColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 0.6f), ChartColor.FromRgba(54, 162, 235, 0.6f), ChartColor.FromRgba(255, 206, 86, 0.6f), ChartColor.FromRgba(75, 192, 192, 0.6f), ChartColor.FromRgba(153, 102, 255, 0.6f), ChartColor.FromRgba(255, 159, 64, 0.6f) };
     List<string> borderColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 1f), ChartColor.FromRgba(54, 162, 235, 1f), ChartColor.FromRgba(255, 206, 86, 1f), ChartColor.FromRgba(75, 192, 192, 1f), ChartColor.FromRgba(153, 102, 255, 1f), ChartColor.FromRgba(255, 159, 64, 1f) };
 
     bool isAlreadyInitialised;
-
-    Random random = new Random(DateTime.Now.Millisecond);
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!isAlreadyInitialised)
         {
             isAlreadyInitialised = true;
-
-            await Task.WhenAll(HandleRedraw(barChart, GetBarChartDataset));
+            var result = await Http.GetFromJsonAsync<WeekonWeekDays>("Dashboard/WeekOnWeekDays");
+            lastWeekTransactions = result.LastWeek.ToArray();
+            currentWeekTransactions = result.CurrentWeek.ToArray();
+            await Task.WhenAll(HandleRedraw(barChart, GetBarChartDatasetLastWeek, GetBarChartDatasetCurrentWeek));
 
         }
     }
 
-    async Task HandleRedraw<TDataSet, TItem, TOptions, TModel>(Blazorise.Charts.BaseChart<TDataSet, TItem, TOptions, TModel> chart, Func<TDataSet> getDataSet)
+    async Task HandleRedraw<TDataSet, TItem, TOptions, TModel>(Blazorise.Charts.BaseChart<TDataSet, TItem, TOptions, TModel> chart, Func<TDataSet> getDataSet1, Func<TDataSet> getDataSet2)
 where TDataSet : ChartDataset<TItem>
 where TOptions : ChartOptions
 where TModel : ChartModel
     {
         await chart.Clear();
 
-        await chart.AddLabelsDatasetsAndUpdate(Labels, new TDataSet[] { getDataSet(), getDataSet() }); ;
+        await chart.AddLabelsDatasetsAndUpdate(Labels, new TDataSet[] { getDataSet1(), getDataSet2() }); ;
     }
 
-    BarChartDataset<double> GetBarChartDataset()
+    BarChartDataset<double> GetBarChartDatasetLastWeek()
     {
-
+        var chartData = lastWeekTransactions.Select(t => t.Amount).ToList();
         return new BarChartDataset<double>
         {
-            Label = "Week",
-            Data = RandomizeData(),
+            Label = "Last Week",
+            Data = chartData,
             BackgroundColor = backgroundColors,
             BorderColor = borderColors,
             BorderWidth = 1
         };
     }
 
-    List<double> RandomizeData()
+    BarChartDataset<double> GetBarChartDatasetCurrentWeek()
     {
-        return new List<double> { random.Next(3, 50) * random.NextDouble(), random.Next(3, 50) * random.NextDouble(), random.Next(3, 50) * random.NextDouble(), random.Next(3, 50) * random.NextDouble(), random.Next(3, 50) * random.NextDouble(), random.Next(3, 50) * random.NextDouble() };
+        var chartData = currentWeekTransactions.Select(t => t.Amount).ToList();
+        return new BarChartDataset<double>
+        {
+            Label = "Current Week",
+            Data = chartData,
+            BackgroundColor = currentWeekbackgroundColors,
+            BorderColor = borderColors,
+            BorderWidth = 1
+        };
     }
 
 }

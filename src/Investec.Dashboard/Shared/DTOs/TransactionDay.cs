@@ -6,7 +6,7 @@ namespace Investec.Dashboard.Shared.DTOs
     {
         public DateTime Date { get; set; }
         public int Day { get { return Date.Day; } }
-        public string Type { get; set; }
+        public string Type { get; set; } = "DEBIT";
         public double Amount { get; set; }
     }
 }
