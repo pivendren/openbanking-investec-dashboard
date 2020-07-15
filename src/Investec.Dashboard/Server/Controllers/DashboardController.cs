@@ -11,7 +11,7 @@ namespace Investec.Dashboard.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class Dashboard : ControllerBase
+    public class DashboardController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
  {
@@ -20,7 +20,7 @@ namespace Investec.Dashboard.Server.Controllers
 
         private readonly InvestecDBContext _investecDB;
 
-        public Dashboard(InvestecDBContext investecDB)
+        public DashboardController(InvestecDBContext investecDB)
         {
             _investecDB = investecDB;
         }
